@@ -705,7 +705,6 @@ def train_one_epoch(
 
         params.batch_idx_train += 1
         batch_size = len(batch["text"])
-        print(f"batch_size: {batch_size}")
 
         try:
             # Лог от 10.01 ошибка CUDA out of MEMORY на функции compute_loss

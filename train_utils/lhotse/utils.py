@@ -1,7 +1,9 @@
 import random
+import uuid
+
 import numpy as np
 import torch
-import uuid
+
 
 def fix_random_seed(random_seed: int):
     """

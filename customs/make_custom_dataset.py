@@ -1,7 +1,6 @@
 import h5py
 import glob
 import torch
-import numpy as np
 import os
 import torchaudio
 import soundfile as sf
@@ -24,16 +23,18 @@ tokenizer = PhonemeBpeTokenizer(tokenizer_path)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def make_prompts(name, audio_prompt_path, transcript=None):
+    print(f"debug audio path: {audio_prompt_path}")
     text_tokenizer = PhonemeBpeTokenizer(tokenizer_path="./utils/g2p/bpe_69.json")
     text_collater = get_text_token_collater()
     codec = AudioTokenizer(device)
     wav_pr, sr = torchaudio.load(audio_prompt_path)
     # check length
     if wav_pr.size(-1) / sr > 15:
-        raise ValueError(f"Prompt too long, expect length below 15 seconds, got {wav_pr / sr} seconds.")
+        raise ValueError(f"Prompt {audio_prompt_path} too long, expect length below 15 seconds, got {wav_pr / sr} seconds.")
     if wav_pr.size(0) == 2:
         wav_pr = wav_pr.mean(0, keepdim=True)
     text_pr, lang_pr = make_transcript(name, wav_pr, sr, transcript)
+    print(f"debug: {lang_pr}: {text_pr}")
 
     # tokenize audio
     encoded_frames = tokenize_audio(codec, (wav_pr, sr))
@@ -79,5 +80,6 @@ def create_dataset(data_dir, dataloader_process_only):
                     except Exception as e:
                         print(f"An error occurred: {e}")
     else:
+        print('debug ', data_dir)
         dataloader = create_dataloader(data_dir=data_dir)
         return dataloader

@@ -1,13 +1,12 @@
-import os
-import torch
 import logging
+import os
+
+import torch
+from data.tokenizer import AudioTokenizer, tokenize_audio
 from macros import *
-from data.tokenizer import (
-    AudioTokenizer,
-    tokenize_audio,
-)
 from models.vallex import VALLE
 from vocos import Vocos
+
 
 def get_model(device):
     url = 'https://huggingface.co/Plachta/VALL-E-X/resolve/main/vallex-checkpoint.pt'

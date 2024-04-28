@@ -14,11 +14,17 @@ if torch.cuda.is_available():
 from vocos import Vocos
 
 def get_model(device):
+    import pathlib
+    pathlib.WindowsPath = pathlib.PosixPath
+
     url = 'https://huggingface.co/Plachta/VALL-E-X/resolve/main/vallex-checkpoint.pt'
+
+    # --checkpoint=${exp_dir}/best-valid-loss.pt
 
     checkpoints_dir = "./checkpoints"
 
-    model_checkpoint_name = "vallex-checkpoint_modified.pt"
+    # model_checkpoint_name = "vallex-checkpoint_modified.pt" -- old 
+    model_checkpoint_name = "vallex-checkpoint.pt"
     if not os.path.exists(checkpoints_dir): os.mkdir(checkpoints_dir)
     if not os.path.exists(os.path.join(checkpoints_dir, model_checkpoint_name)):
         import wget
@@ -47,7 +53,10 @@ def get_model(device):
         prepend_bos=True,
         num_quantizers=NUM_QUANTIZERS,
     ).to(device)
-    checkpoint = torch.load(os.path.join(checkpoints_dir, model_checkpoint_name), map_location='cpu')
+
+    checkpoint_path_to_load = os.path.join(checkpoints_dir, model_checkpoint_name)
+    print('debug ', checkpoint_path_to_load) 
+    checkpoint = torch.load(checkpoint_path_to_load, map_location='cpu')
     missing_keys, unexpected_keys = model.load_state_dict(
         checkpoint["model"], strict=True
     )

@@ -1,16 +1,16 @@
+import contextlib
 import logging
+from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Optional, Union, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 import torch
 from torch import Tensor
 from torch.optim import Optimizer
-from pathlib import Path
-from collections import defaultdict
-import contextlib
+
 _lhotse_uuid = None
-import uuid
 import argparse
+import uuid
 import warnings
 
 # use duck typing for LRScheduler since we have different possibilities, see

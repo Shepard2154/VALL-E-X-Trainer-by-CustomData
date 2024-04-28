@@ -10,25 +10,29 @@ lang2token = {
     'ja': "[JA]",
     "en": "[EN]",
     'mix': "",
+    'ru': "[RU]"
 }
 
 lang2code = {
     'zh': 0,
     'ja': 1,
     "en": 2,
+    "ru": 3
 }
 
 token2lang = {
     '[ZH]': "zh",
     '[JA]': "ja",
     "[EN]": "en",
-    "": "mix"
+    "": "mix",
+    '[RU]': "ru"
 }
 
 code2lang = {
     0: 'zh',
     1: 'ja',
     2: "en",
+    3: "ru"
 }
 
 langdropdown2token = {
@@ -36,4 +40,5 @@ langdropdown2token = {
     '中文': "[ZH]",
     '日本語': "[JA]",
     'Mix': "",
+    'Russian': "[RU]"
 }

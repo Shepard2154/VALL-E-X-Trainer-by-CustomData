@@ -4,7 +4,7 @@ import torchaudio
 import logging
 import langid
 import whisper
-langid.set_languages(['en', 'zh', 'ja'])
+langid.set_languages(['en', 'zh', 'ja', 'ru'])
 
 import numpy as np
 from data.tokenizer import (
@@ -18,6 +18,10 @@ from macros import *
 
 text_tokenizer = PhonemeBpeTokenizer(tokenizer_path="./utils/g2p/bpe_69.json")
 text_collater = get_text_token_collater()
+
+# my block
+os.environ["CUDA_VISIBLE_DEVICES"]=""
+# my block
 
 device = torch.device("cpu")
 if torch.cuda.is_available():
@@ -38,9 +42,12 @@ def transcribe_one(model, audio_path):
     mel = whisper.log_mel_spectrogram(audio).to(model.device)
 
     # detect the spoken language
-    _, probs = model.detect_language(mel)
-    print(f"Detected language: {max(probs, key=probs.get)}")
-    lang = max(probs, key=probs.get)
+    try:
+        _, probs = model.detect_language(mel)
+        print(f"Detected language: {max(probs, key=probs.get)}")
+        lang = max(probs, key=probs.get)
+    except ValueError:
+        lang = 'english'
     # decode the audio
     options = whisper.DecodingOptions(temperature=1.0, best_of=5, fp16=False if device == torch.device("cpu") else True, sample_len=150)
     result = whisper.decode(model, mel, options)
